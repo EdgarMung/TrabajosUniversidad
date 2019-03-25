@@ -1,7 +1,5 @@
 from tkinter import *
 import tkinter
-from PIL import Image
-from PIL import ImageTk
 
 def Proceso():
 	pass

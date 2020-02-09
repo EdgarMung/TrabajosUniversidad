@@ -15,9 +15,7 @@ def PrimerFiltro():
 		for j in range(0,TotalDeNumeros):
 			if Tabla_D[j][i] == '1':
 				bandera_uno+=1
-				#print("Si_uno"+str(i)+str(j))
 			else:
-				#print("Si_Cero"+str(i)+str(j))
 				bandera_cero+=1
 
 		if bandera_cero == TotalDeNumeros:
@@ -32,9 +30,7 @@ def PrimerFiltro():
 		for j in range(0,TotalDeNumeros):
 			if Tabla_T[j][i] == '1':
 				bandera_uno+=1
-				#print("Si_uno"+str(i)+str(j))
 			else:
-				#print("Si_Cero"+str(i)+str(j))
 				bandera_cero+=1
 
 		if bandera_cero == TotalDeNumeros:

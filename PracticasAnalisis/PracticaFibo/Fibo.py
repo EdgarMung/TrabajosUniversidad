@@ -1,10 +1,12 @@
 import numpy as np
+import time
 
 def Algoritmo1(n):
     if n < 2:
         return n    
     else:
         return Algoritmo1(n-1)+Algoritmo1(n-2)
+    
 
 def Algoritmo2(n):
     aux = []
@@ -32,14 +34,30 @@ def fibo(n,arreglo):
     return arreglo[n]
 
 def Algoritmo3(n):
+    global TInicial
     Arreglo = np.zeros((n),dtype=int)
 
     for i in range(0,n):
         Arreglo[i] = -1
 
+    TInicial = time.time()
     return fibo(n-1,Arreglo)
 
-numero = 40
-print("Algoritmo 1: "+str(Algoritmo1(numero-1)))
-print("Algoritmo 2: "+str(Algoritmo2(numero)))
-print("Algoritmo 3: "+str(Algoritmo3(numero)))
+numero = 50
+
+TInicial = time.time()
+Algoritmo1(numero-1)
+TFinal = time.time()
+tiempoAlgorimto1 =  TFinal - TInicial
+print("Algoritmo 1: "+str(tiempoAlgorimto1))
+
+TInicial = time.time()
+Algoritmo2(numero)
+TFinal = time.time()
+tiempoAlgorimto2 =  TFinal - TInicial
+print("Algoritmo 2: "+str(tiempoAlgorimto2))
+
+Algoritmo2(numero)
+TFinal = time.time()
+tiempoAlgorimto3 =  TFinal - TInicial
+print("Algoritmo 3: "+str(tiempoAlgorimto3))

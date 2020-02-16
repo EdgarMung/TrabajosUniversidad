@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image , ImageTk
 
 class Crear_Ventanas(tk.Frame):
     def __init__(self, master=None):
@@ -24,7 +25,22 @@ class Crear_Ventanas(tk.Frame):
     def create_second_window(self,tipo_ventana,root):
         ventana = tk.Toplevel(root)
         if tipo_ventana == "AFN Simple":
-            ventana.geometry("500x500")
+            aux = Image.open("./Imagenes/Prueba.jpg")
+            img = ImageTk.PhotoImage(aux.resize((150, 100), Image.ANTIALIAS))
+            
+            ventana.geometry("500x300")
             ventana.title("Operación "+tipo_ventana)
             tk.Label(ventana, text="Por favor, Ingrese el caracter del AFN Simple: ").place(x = 50, y = 50)
-            tk.Entry(ventana,width = 10).place(x = 300, y = 50 )
+            tk.Entry(ventana,width = 10).place(x = 335, y = 50 )
+            Lista = tk.Listbox(ventana)
+            Lista.insert(tk.END,"Esta webada ya quedo")
+            Lista.place(x = 50, y = 70)
+            tk.Label(ventana,image = img).place(x = 250 , y =70)
+
+            
+
+            
+             
+
+    def IngresarAFNDiccionario(self,Diccionario):
+        pass

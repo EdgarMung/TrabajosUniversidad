@@ -16,6 +16,7 @@ class AFN:
 			self.agregar_estado(0)
 			self.agregar_estado(1)
 			self.anadir_transicion(0,simbolo,1)
+
 	#Agregar un simbolo al lenguaje.
 	def agregar_simbolo(self,simbolo):
 		if simbolo in self.alfabeto:
@@ -137,17 +138,17 @@ class AFN:
 			print("FINAL "+str(key))
 			print(self.estados.get(key).transiciones)
 
-a=AFN(simbolo='a')
-b=AFN(simbolo='b')
-c=AFN(simbolo='c')
+#a=AFN(simbolo='a')
+#b=AFN(simbolo='b')
+#c=AFN(simbolo='c')
 
-a.concatenacion(b)
-b=AFN(simbolo='b')
-b.union(c)
+#a.concatenacion(b)
+#b=AFN(simbolo='b')
+#b.union(c)
 
-b.concatenacion(a)
-b.interrogacion()
-b.cerradura_kleene()
-a=AFN(simbolo='a')
-a.concatenacion(b)
-a.imprimir_transiciones()
+#b.concatenacion(a)
+#b.interrogacion()
+#b.cerradura_kleene()
+#a=AFN(simbolo='a')
+#a.concatenacion(b)
+#a.imprimir_transiciones()

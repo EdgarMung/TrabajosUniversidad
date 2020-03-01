@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{Deb08}
+{\sc Deb~K., M.~K.}
+\newblock {A Review of Nadir Point Estimation Procedures Using Evolutionary
+  Approaches: A Tale of Dimensionality Reduction}.
+\newblock Tech. Rep. KanGAL Report 2008004, Indian Institute of Technology,
+  2008.
+
+\bibitem{Marler04}
+{\sc Marler, R., and Arora, J.}
+\newblock {Survey of Multi-objective Optimization Methods for Engineering}.
+\newblock {\em Structural and Multidisciplinary Optimization 26}, 6 (2004),
+  369--395.
+
+\bibitem{Miettinen98}
+{\sc Miettinen, K.}
+\newblock {\em Nonlinear Multiobjective Optimization}, vol.~12.
+\newblock International Series in Operations Research \& Management Science,
+  1998.
+
+\bibitem{Zhang07}
+{\sc Zhang, Q., and Li, H.}
+\newblock {MOEA}/{D}: {A} {M}ultiobjective {E}volutionary {A}lgorithm {B}ased
+  on {D}ecomposition.
+\newblock {\em IEEE Transactions on Evolutionary Computation 11}, 6 (December
+  2007), 712--731.
+
+\end{thebibliography}

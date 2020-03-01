@@ -67,7 +67,7 @@ for i in range(1,11):
     
     m = i*1000
     Numeros.append(m)
-    cadenaAux ="/home/edgarmunguia/Documentos/TrabajosUniversidad/PracticasAnalisis/rand_case/rand_" + str(m)
+    cadenaAux ="../rand_case/rand_" + str(m)
     ArchivoDatos = open(cadenaAux,"r")
     for linea in ArchivoDatos:
         A.append(int(linea))

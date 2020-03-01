@@ -1,0 +1,297 @@
+
+%%%%%%%%%%%%%%%%%%%%%%% file typeinst.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is the LaTeX source for the instructions to authors using
+% the LaTeX document class 'llncs.cls' for contributions to
+% the Lecture Notes in Computer Sciences series.
+% http://www.springer.com/lncs       Springer Heidelberg 2006/05/04
+%
+% It may be used as a template for your own input - copy it
+% to a new file with a new name and use it as the basis
+% for your article.
+%
+% NB: the document class 'llncs' has its own and detailed documentation, see
+% ftp://ftp.springer.de/data/pubftp/pub/tex/latex/llncs/latex2e/llncsdoc.pdf
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{amsmath}
+\documentclass[runningheads,a4paper]{llncs}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage{textcomp}
+\usepackage{commath}
+\setcounter{tocdepth}{3}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage[table]{xcolor}
+\usepackage{hhline}
+
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+
+\usepackage{booktabs} 
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+\graphicspath{{fig/}}
+
+
+\urldef{\mailsa}\path|{emontero, nerojas, mcriff}@inf.utfsm.cl|
+\urldef{\mailsb}\path|{pescador, rhernandez}@computacion.cs.cinvestav.mx| 
+\urldef{\mailsc}\path|ccoello@cs.cinvestav.mx| 
+
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+\newcommand{\keywords}[1]{\par\addvspace\baselineskip
+\noindent\keywordname\enspace\ignorespaces#1}
+
+\newcommand{\vnorm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\textoverline}[1]{$\overline{\mbox{#1}}$}
+\newcommand{\textunderline}[1]{$\underline{\mbox{#1}}$}
+
+\def\RR {\mathbin{{\rm I}\mkern - 4mu{\rm R}}}
+\def\NN {\mathbin{{\rm I}\mkern - 4mu{\rm N}}}
+
+% \setlength{\abovedisplayskip}{2pt}
+% \setlength{\belowdisplayskip}{1cm}
+
+% Space between a table
+% \newcommand{\aspace}{\vspace{-0.2cm}} % above
+% \newcommand{\bspace}{\vspace{-0.2cm}} % bottom
+% \def\baselinestretch{0.985}
+
+\definecolor{lightgray}{rgb}{0.83, 0.83, 0.83}
+
+\newlength{\Oldarrayrulewidth}
+% Cline redefining to add line thickness
+\newcommand{\Cline}[2]{%
+  \noalign{\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}}%
+  \noalign{\global\setlength{\arrayrulewidth}{#1}}\cline{#2}%
+  \noalign{\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}}
+}
+
+\begin{document}
+
+\mainmatter
+
+\title{Pr\'actica 2. ``Algoritmos probabilisticos y aleatorios''}
+
+% Knowledge Extraction 
+% Incorporation
+% Discovery from
+% metaheuristic design
+% Discovering Knowledge from Scalarizing Functions
+% On the discovering knowledge from Scalarizing Functions
+% Discovering knowledge from Scalarizing Functions
+
+\titlerunning{Pr\'actica 2}
+
+\author{
+   Miriam Pescador-Rojas\inst{1} \and
+   Carlos A. Coello Coello
+%    \thanks{This work is supported by the collaboration project CONACyT-CONICyT 2010-199.}
+%   
+%    \thanks{The last author gratefully acknowledges support from CONACyT project no. 221551.} 
+}
+
+\authorrunning{Prof. Miriam Pescador Rojas}
+
+
+\institute{
+ ESCOM, Instituto Polit\'{e}cnico Nacional, Ciudad de M\'{e}xico 07738, M\'{e}xico \and
+ CINVESTAV-IPN (Evolutionary Computation Group) Computer\\
+ Science Department, Ciudad de M\'{e}xico 07360, M\'{e}xico  
+}
+
+% \toctitle{Lecture Notes in Computer Science}
+% \tocauthor{Authors' Instructions}
+\maketitle
+
+\begin{abstract}
+multi-objective evolutionary algorithms (MOEAs) 
+
+\keywords{algoritmos aleatorios, m\'etodo de monte Carlo, algoritmos de las Vegas}
+          
+\end{abstract}
+
+
+\section{Introducci\'on}
+Un algoritmo se dice aleatorizado si usa alg\'un grado de aleatoriedad como parte de su l\'ogica.
+
+En este tipo de algoritmos el tiempo de ejecuci\'on o su salida se convierten en variables aleatorias.
+
+Con base en el tiempo de ejecuci\'on y la salida de los algoritmos aleatorizados 
+como variables aleatorias, podemos  definir dos tipos de algoritmos:
+\begin{itemize}
+\item 	\textit{Las Vegas:} algoritmos que siempre entregan el resultado correcto, pero cuyo tiempo de ejecuci\'on var\'ia (incluso para la misma entrada de datos).
+Un algoritmo Las Vegas se dice eficiente si su tiempo esperado de ejecuci\'on es polinomial para cualquier entrada.
+\item 	\textit{Monte Carlo:} algoritmos que pueden entregar resultados incorrectos con una probabilidad acotada.
+Podemos disminuir esta probabilidad de error repitiendo el algoritmo a expensas del tiempo de ejecuci\'on.
+Un algoritmo Monte Carlo se dice eficiente si su tiempo de ejecuci\'on en el peor caso es polinomial para cualquier entrada.
+\end{itemize}
+
+\subsection{M\'etodo de Monte Carlo aplicado a b\'usquedas}
+
+Los M\'etodos de Monte Carlo se basan en la analog\'ia entre probabilidad y volumen. Las matem\'aticas de las medidas formalizan la noci\'on intuitiva de probabilidad, asociando un evento con un conjunto de resultados y definiendo que la probabilidad del evento ser\'a el volumen o medida relativa del universo de posibles resultados. Monte-Carlo usa esta identidad a la inversa, calculando el volumen de un conjunto interpretando el volumen como una probabilidad. En el caso m\'as simple, esto significa muestrear aleatoriamente un universo de resultados posibles y tomar la fracci\'on de muestras aleatorias que caen en un conjunto dado como una estimaci\'on del volumen del conjunto. La ley de grandes n\'umeros asegura que esta estimaci\'on converja al valor correcto a medida que aumenta el n\'umero de muestras. El teorema del l\'imite central proporciona informaci\'on sobre la magnitud del probable error en la estimaci\'on despu\'es de un n\'umero finito de muestras.
+
+En un proceso est\'andar de Monte Carlo tenemos los siguientes pasos:
+\begin{itemize}
+\item Se generan un gran n\'umero de simulaciones aleatorias desde la posici\'on del tablero para la que se desea encontrar el mejor movimiento siguiente.
+\item Se almacenan las estad\'isticas para cada movimiento posible a partir de este estado inicial.
+\item Se devuelve el movimiento con los mejores resultados generales.
+
+\end{itemize}
+
+Un ejemplo com\'un de la aplicaci\'on de m\'etodo Monte Carlo es la aproximaci\'on del valor de  $\pi$, para ello tenemos que considerar un c\'irculo unitario (radio=1) dentro de un cuadrado con los lados iguales a 2 (v\'ease la figura 1). S\'i escogemos un punto al azar $(x,y)$ donde $x$ y $y$ est\'an definidos en el rango $[-1,1]$, la probabilidad de que este punto al azar se encuentre dentro del c\'irculo unitario se da como la proporci\'on entre el \'area el c\'irculo unitario y el cuadrado:
+
+\begin{equation}
+P(x^2, y^2 \leq 1) = \frac{A_{circle}}{A_{square}} = \frac{\pi}{4}
+\end{equation}
+Si escogemos puntos al azar $N$ veces y $M$ de esas veces el punto cae dentro del c\'irculo unitario, la probabilidad de que un punto al azar caiga dentro de dicho c\'irculo esta dado por:
+\begin{equation}
+P'(x^2, y^2 \leq 1) = \frac{M}{N}
+\end{equation}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{aproximaPi.png}
+\end{figure}
+
+Por lo tanto consideramos la siguiente ecuaci\'on para el calculo de $\pi$:
+
+\begin{equation}
+H(x,y) = \begin{cases}  1 \text{ si } x^2 + y^2 \leq 1 \\ 
+0 \text{ in other case }  \end{cases}
+\end{equation}
+
+\subsection{Desarrollo (secci\'on 1. Monte Carlo)}
+
+\begin{itemize}
+\item Pruebe el  c\'odigo en python proporcionado y ejecute pruebas para $N = 100, 1000, 10000, 100000, 1000000$, muestre cu\'ales son los valores que obtiene para $\pi$ en cada caso.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{tabla.png}
+\label{fig:tabla Resultados}
+\caption{se muestran los resultados de la experimentación}
+\end{figure}
+
+\item Implemente el m\'etodo de Monte Carlo para resolver integrales.
+Utilice la siguiente formula:
+\begin{equation}
+\frac{b-a}{n} \sum_{i = 1}^{n}f(u_i(b-a) + a)
+\end{equation}
+
+donde $a$ y $b$ son los l\'imites inferior y superior de una integral, $u_i$ es un valor aleatorio generado entre $[0,1]$ y $f$ se refiere a la funci\'on a integrar.
+
+Considere las siguientes integrales para probar su implementaci\'on:
+\begin{equation}
+f_1(x) = \int_{0}^{1} (1-x^2)^{3/2} \cdot dx
+\end{equation}
+
+\begin{equation}
+f_2(x) = \int_{-1}^{1} e^{x+x^2} \cdot dx
+\end{equation}
+
+\begin{equation}
+f_3(x) = \int_{0}^{2} (1+x^2)^2 \cdot dx
+\end{equation}
+
+\begin{equation}
+f_4(x) = \int_{0}^{2\pi} \frac{1}{cos(x)+2} \cdot dx
+\end{equation}
+
+\begin{equation}
+f_5(x) = \int_{0}^{2} log(x) \cdot dx
+\end{equation}
+\end{itemize}
+
+Deber\'a desarrollar una simulaci\'on donde se muestre paso a paso la generaci\'on de n\'umeros aleatorios y su graficaci\'on en la funci\'on correspondiente. (Ver ejemplo en figura \ref{fig:interfaz} y consulte la p\'agina web https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/monte-carlo-methods-in-practice/monte-carlo-integration). 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{Interfaz.png}
+\label{fig:interfaz}
+\caption{Ejemplo de interfaz gr\'afica para simular aproximaci\'on a integrales}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.3]{interfazCreada.png}
+\label{fig:Interfaz Hecha}
+\caption{Interfaz gr\'afica para simular aproximaci\'on a integrales que se realiz\'o}
+\end{figure}
+
+\subsection{Desarrollo (secci\'on 2. Las Vegas )}
+
+Para poner en pr\'actica el algoritmo las vegas se implementaran dos ejercicios:
+
+\begin{enumerate}
+	\item Algoritmo de Quick-sort. Modifique el algoritmo de Quick sort implementado en la pr\'actica 1. Por cada llamada recursiva seleccione al azar el pivote, compare si hay mejora respecto  a su versi\'on anterior para el caso promedio y reporte el tiempo de ejecuci\'on para los siguientes casos $n = 1000, 2000, 3000, \ldots, 10,000$ ($n$ es el n\'umero de elementos en un arreglo).
+	\item El prolema de las 8 reinas. Se requiere generar una soluci\'on correcta al problema de las 8 reinas de acuerdo a las siguientes reglas.
+\end{enumerate}
+
+El problema de las 8 reinas consiste en colocar las piezas en un tablero de ajedrez sin que se amenacen entre s\'i. En el juego de ajedrez la reina amenaza a aquellas piezas que se encuentren en su misma fila, columna o diagonal. 
+
+Para resolver este problema emplearemos un esquema de algoritmo Las vegas. Se supondr\'a que hay un cierto n\'umero de piezas colocadas en forma correcta (sin atacarse) y se generar\'a el resto de las piezas al azar.
+Considera las siguientes configuraciones predefinidas e implemente un algoritmo que genere las otras reinas de manera aleatoria.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.8]{reinas3.png}
+\caption{Tablero con 3 reinas preestablecidas.}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.8]{reinas4.png}
+\caption{Tablero con 4 reinas preestablecidas.}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.8]{reinas5.png}
+\caption{Tablero con 5 reinas preestablecidas.}
+\end{figure}
+
+Reporte en una tabla  el porcentaje de \'exitos del algoritmo de acuerdo a los  casos presentados en la tabla \ref{tbl:reinas}
+
+\begin{table}[!ht]
+\centering
+\label{tbl:reinas}
+\caption{Casos para el problema de las 8 reinas}
+\begin{tabular}{l|llll}
+\hline
+                                & \multicolumn{4}{l}{\textbf{Reinas aleatorias}}                                                \\
+\textbf{Soluciones aleatorias}  & 8                     & 5                     & 4                     & 3                     \\ \hline
+\multicolumn{1}{|l|}{1,000}     & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} \\ \hline
+\multicolumn{1}{|l|}{10,000}    & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} \\ \hline
+\multicolumn{1}{|l|}{100,000}   & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} \\ \hline
+\multicolumn{1}{|l|}{1,000,000} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} \\ \hline
+\end{tabular}
+\end{table}
+
+La pr\'actica puede realizarse en equipos de 2 personas.
+La entrega de la pr\'actica es por correo electr\'onico para el pr\'oximo viernes 1 de marzo (11:59 pm). Deber\'a enviar el c\'odigo fuente y un reporte en formato latex (2).
+
+
+
+
+\cite{Marler04}
+\cite{Deb08}
+\cite{Miettinen98}
+\cite{Zhang07}
+
+\bibliographystyle{acm}
+\bibliography{references}
+
+
+\end{document}

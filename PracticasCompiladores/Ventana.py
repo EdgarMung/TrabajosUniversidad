@@ -149,6 +149,26 @@ def CreacionCerraduraOpcional(Diccionario,Lista,root):
     Lista["values"] = Elementos
     print(Diccionario)
 
+def CrearUnionEspecial(Diccionario):
+    listaObjetos = []
+    Elementos = list(Diccionario.keys())
+
+    ObjetoUnico = Diccionario.get(Elementos[0])
+    llave = Elementos.pop(0)
+
+    for i in Elementos:
+        listaObjetos.append(Diccionario.get(i))
+        Diccionario.pop(i)
+
+    ObjetoUnico.union_especial(listaObjetos)
+    NuevaLlave = "Union_Especial"
+
+    Diccionario.pop(llave)
+
+    Diccionario[NuevaLlave] = ObjetoUnico
+
+    print("Union finalizada")
+
 
 # Clase para crear la pantalla **********************************************************************************
 class Crear_Ventanas(tk.Frame):
@@ -156,7 +176,7 @@ class Crear_Ventanas(tk.Frame):
         super().__init__(master)
         self.master = master
         self.DiccionarioObjetos = {}
-        self.master.geometry("400x550")
+        self.master.geometry("400x650")
         self.master.title("Compiladores")
         self.pack()
 
@@ -168,7 +188,8 @@ class Crear_Ventanas(tk.Frame):
         tk.Button(self, text="Cerradura Positiva", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold" ,command = lambda: self.create_second_window("Cerradura+",self.master)).pack()
         tk.Button(self, text="Cerradura Kleene", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Cerradura*",self.master)).pack()
         tk.Button(self, text="Opcional", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Opcional",self.master)).pack()
-        tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.Mostrar()).pack()
+        tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Mostrar",self.master)).pack()
+        tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: CrearUnionEspecial(self.DiccionarioObjetos)).pack()
         self.quit = tk.Button(self, text="Cerrar" , fg="red", command=self.master.destroy)
         self.quit.pack(side="bottom")
 
@@ -280,6 +301,24 @@ class Crear_Ventanas(tk.Frame):
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
             EtiquetaImagen.place(x = 70 , y = 100)
+
+        if tipo_ventana == "Mostrar":
+            Elementos = list(self.DiccionarioObjetos.keys())
+            AuxTexto = []
+
+            for i in Elementos:
+                cadenaAux = "AFN: " + i
+                AuxTexto.append(cadenaAux)
+                for key in range(len(list(self.DiccionarioObjetos[i].estados.keys()))):
+                    AuxTexto.append("  Estado: "+str(key)+" -->  "+str(self.DiccionarioObjetos[i].estados.get(key).transiciones))
+                
+                AuxTexto.append("")
+
+            tk.Label(ventana, text="Trasiciones de los AFN actuales: ").place(x = 20, y = 20)
+
+            texto = tk.Listbox(ventana, height = 12 , width = 55 )
+            texto.insert(tk.END,*AuxTexto)
+            texto.place(x = 20, y = 40)
 
         tk.Button(ventana, text="Cerrar" , fg="red", command = ventana.destroy).place(x = 225, y = 250)
 

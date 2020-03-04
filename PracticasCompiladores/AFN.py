@@ -207,13 +207,14 @@ class AFN:
 		#print("Finales")
 		#print(self.estados_aceptacion)
 
+		
 		lista_finales=[]
 		for lista in conjunto_conjuntos:
 			lista_finales.append(0)
 			for final in self.estados_aceptacion:
 				if final in lista:
 					lista_finales.pop()
-					lista_finales.append(1)
+					lista_finales.append(final)
 
 		#print(lista_finales)
 		return(self.crear_AFD(cerraduras_revisadas,conjuntos_transiciones,lista_finales,self.alfabeto))

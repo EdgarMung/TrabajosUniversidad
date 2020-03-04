@@ -35,6 +35,9 @@ def AlgoritmoLex(cadena,Lista,AFD):
     Lista.delete(0,tk.END)
     TamañoCadena = len(cadena)
     estado_Actual = 0
+    antes_vista = 0
+    posicionCadena = 0
+    posicionUltimoAceptado = 0
 
     if TamañoCadena == 0:
         token = ChecarToken(estado_Actual,estados,tokens)
@@ -42,33 +45,46 @@ def AlgoritmoLex(cadena,Lista,AFD):
             Salida.append(" "+" -> "+str(token))
     else:
         cadenaAux = ""
-        for caracter in cadena:
-            if PertenceAlfabeto(caracter,alfabeto):
+        while posicionCadena < len(cadena):
+            caracter = cadena[posicionCadena]
+            #if PertenceAlfabeto(caracter,alfabeto):
+            if BuscarTransicion(caracter,transiciones,estado_Actual) > -1:
                 estado_Actual = BuscarTransicion(caracter,transiciones,estado_Actual)
-                if estado_Actual > -1:
-                    cadenaAux+= caracter
-                    token = ChecarToken(estado_Actual,estados,tokens)
-                    if token > -1:
-                        Salida.append(cadenaAux+" -> "+str(token))
-                        cadenaAux = ""
-                else:
+                posicionCadena += 1
+                cadenaAux+= caracter
+                
+                token = ChecarToken(estado_Actual,estados,tokens)
+                if token > 0:
+                    antes_vista = 1
+                    posicionUltimoAceptado = posicionCadena
+            else:
+                if (antes_vista == 0):
                     estado_Actual = 0
                     cadenaAux = ""
-            else:
-                cadenaAux = ""
-                estado_Actual = 0
-        
+                else:
+                    Salida.append(cadena+" -> "+str(token))
+                    antes_vista = 0
+                    posicionCadena = posicionUltimoAceptado
+            #else:
+            #    cadenaAux = ""
+            #    estado_Actual = 0
+        if (antes_vista != 0):
+            Salida.append(cadena+" -> "+str(token))
+            
+
+            
     Lista.insert(tk.END,*Salida)
 
 def ObtencionTablaAFD(AFD,Lista):
     Aux = []
-    token = 10
-    for i in AFD.finales:
-        if i == 1:
-            AFD.tokens.append(token)
-            token += 10
-        else:
-            AFD.tokens.append(-1)
+    AFD.tokens = AFD.finales
+    #token = 10
+    #for i in AFD.finales:
+    #    if i == 1:
+    #        AFD.tokens.append(token)
+    #        token += 10
+    #    else:
+    #        AFD.tokens.append(-1)
 
     Elementos = list(AFD.transiciones.keys())
 

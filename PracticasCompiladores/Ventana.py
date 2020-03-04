@@ -5,18 +5,120 @@ from tkinter import ttk
 from tkinter import messagebox
 
 # Funciones que ayudan a realizar las funciones **************************************************************
+def ChecarToken(estado,estados,tokens):
+    indice = estados.index(estado)
+
+    return tokens[indice] 
+
+def BuscarTransicion(caracter,transiciones,estado_Actual):
+    transicionesDelEstado = transiciones.get(estado_Actual)
+
+    for i in transicionesDelEstado:
+        if caracter == i[0]:
+            return i[1]
+    
+    return -1
+
+def PertenceAlfabeto(caracter,alfabeto):
+    for i in alfabeto:
+        if caracter == i:
+            return True
+    
+    return False
+
+def AlgoritmoLex(cadena,Lista,AFD):
+    estados = AFD.estados
+    tokens = AFD.tokens
+    Salida = []
+    transiciones = AFD.transiciones
+    alfabeto = AFD.alfabeto
+    Lista.delete(0,tk.END)
+    TamañoCadena = len(cadena)
+    estado_Actual = 0
+
+    if TamañoCadena == 0:
+        token = ChecarToken(estado_Actual,estados,tokens)
+        if token > -1:
+            Salida.append(" "+" -> "+str(token))
+    else:
+        cadenaAux = ""
+        for caracter in cadena:
+            if PertenceAlfabeto(caracter,alfabeto):
+                estado_Actual = BuscarTransicion(caracter,transiciones,estado_Actual)
+                if estado_Actual > -1:
+                    cadenaAux+= caracter
+                    token = ChecarToken(estado_Actual,estados,tokens)
+                    if token > -1:
+                        Salida.append(cadenaAux+" -> "+str(token))
+                        cadenaAux = ""
+                else:
+                    estado_Actual = 0
+                    cadenaAux = ""
+            else:
+                cadenaAux = ""
+                estado_Actual = 0
+        
+    Lista.insert(tk.END,*Salida)
+
+def ObtencionTablaAFD(AFD,Lista):
+    Aux = []
+    token = 10
+    for i in AFD.finales:
+        if i == 1:
+            AFD.tokens.append(token)
+            token += 10
+        else:
+            AFD.tokens.append(-1)
+
+    Elementos = list(AFD.transiciones.keys())
+
+    Aux.append("Transiciones del AFD")
+    for i in Elementos:
+        auxTransicion = AFD.transiciones.get(i)
+        Aux.append("    Estado " + str(i) + ": " +str(auxTransicion))
+        
+    #cadena = "     |" 
+    #for i in AFD.alfabeto:
+    #    cadena+= " "+i
+    #cadena+=" | Aceptación"
+    #Aux.append(cadena)
+    #Elementos = list(AFD.transiciones.keys())
+    #cadena = " ->"
+    #for estado in AFD.estados:
+    #    cadena+= str(estado) + "|"
+    #    for caracter in AFD.alfabeto:
+    #        for i in Elementos:
+    #            auxTransicion = AFD.transiciones.get(i)
+    #            for j in range(0,len(auxTransicion)):
+    #                if auxTransicion[j][0] == caracter: 
+    #                    cadena+=" "+str(auxTransicion[j][1])
+    #                else:
+    #                    cadena+=" -"
+    #        cadena+=" |"        
+    #        cadena+= str(AFD.tokens[AFD.estados.index(estado)])
+    #        Aux.append(cadena)
+    #        cadena = "    "
+    Aux.append("")
+    Aux.append("Estados y tokens")
+    for i in range(0,len(AFD.estados)):
+        Aux.append("    "+str(AFD.estados[i])+ " -> "+str(AFD.tokens[i]))
+        
+    Lista.insert(tk.END,*Aux)
+
 def CreacionAFNSimple(Diccionario,Lista,Entrada,root):
     print(Diccionario)
     caract = Entrada.get()
     if caract != "":
         if Diccionario.get(caract) == None:
             Diccionario[caract] = AFN(simbolo=caract)
-            Lista.delete(0,tk.END)
-            Elementos = list(Diccionario.keys())
-            Lista.insert(tk.END,*Elementos)
-            messagebox.showinfo(message="La Creacion del AFN '"+ caract +"' fue Exitosa", title="Confirmacion",parent = root)
         else:
-            messagebox.showerror(message="El caracter ingresado ya fue ocupado. Por favor, ocupar otro.",title="Entrada Vacia",parent = root)
+            llave = caract + " "
+            Diccionario[llave] = AFN(simbolo=caract)
+
+        Lista.delete(0,tk.END)
+        Elementos = list(Diccionario.keys())
+        Lista.insert(tk.END,*Elementos)
+        messagebox.showinfo(message="La Creacion del AFN '"+ caract +"' fue Exitosa", title="Confirmacion",parent = root)  
         
         Entrada.delete(0, tk.END)
     else:
@@ -28,23 +130,19 @@ def CreacionUnion(Diccionario,Lista_a,Lista_b,root):
 
     Elemento_a = Lista_a.get()
     Elemento_b = Lista_b.get()
-
     if Elemento_a != "" and Elemento_b != "": 
-        if Elemento_a != Elemento_b:
-            Objeto_A = Diccionario.get(Elemento_a)
-            Objeto_B = Diccionario.get(Elemento_b)
+        Objeto_A = Diccionario.get(Elemento_a)
+        Objeto_B = Diccionario.get(Elemento_b)
 
-            Objeto_A.union(Objeto_B)
+        Objeto_A.union(Objeto_B)
 
-            KeyAux = "("+Elemento_a + "|" +Elemento_b+")" 
-            ObjetoAux = Objeto_A
+        KeyAux = "("+Elemento_a + "|" +Elemento_b+")" 
+        ObjetoAux = Objeto_A
 
-            Diccionario.pop(Elemento_a)
-            Diccionario.pop(Elemento_b)
-            Diccionario[KeyAux] = ObjetoAux
-            messagebox.showinfo(message="La Union entre '"+ Elemento_a +" y "+ Elemento_b+"' fue Exitosa", title="Confirmacion",parent = root)
-        else:
-            messagebox.showerror(message="Se ha seleccionado el mismo AFN para la union, por favor revise.",title="Mismo AFN",parent = root)
+        Diccionario.pop(Elemento_a)
+        Diccionario.pop(Elemento_b)
+        Diccionario[KeyAux] = ObjetoAux
+        messagebox.showinfo(message="La Union entre '"+ Elemento_a +" y "+ Elemento_b+"' fue Exitosa", title="Confirmacion",parent = root)
     else:
         messagebox.showerror(message="No se ha seleccionado uno de los dos AFN, por favor revise.",title="Lista Vacia",parent = root)
     
@@ -167,8 +265,7 @@ def CrearUnionEspecial(Diccionario):
 
     Diccionario[NuevaLlave] = ObjetoUnico
 
-    print("Union finalizada")
-
+    messagebox.showinfo(message="La Union especial entre los AFN fue Exitosa", title="Confirmacion")
 
 # Clase para crear la pantalla **********************************************************************************
 class Crear_Ventanas(tk.Frame):
@@ -176,7 +273,8 @@ class Crear_Ventanas(tk.Frame):
         super().__init__(master)
         self.master = master
         self.DiccionarioObjetos = {}
-        self.master.geometry("400x650")
+        self.AFD = ""
+        self.master.geometry("400x700")
         self.master.title("Compiladores")
         self.pack()
 
@@ -188,8 +286,9 @@ class Crear_Ventanas(tk.Frame):
         tk.Button(self, text="Cerradura Positiva", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold" ,command = lambda: self.create_second_window("Cerradura+",self.master)).pack()
         tk.Button(self, text="Cerradura Kleene", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Cerradura*",self.master)).pack()
         tk.Button(self, text="Opcional", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Opcional",self.master)).pack()
-        tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Mostrar",self.master)).pack()
         tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: CrearUnionEspecial(self.DiccionarioObjetos)).pack()
+        tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Mostrar",self.master)).pack()
+        tk.Button(self, text="Convertir AFN  a AFD", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Analizador",self.master)).pack()
         self.quit = tk.Button(self, text="Cerrar" , fg="red", command=self.master.destroy)
         self.quit.pack(side="bottom")
 
@@ -319,6 +418,34 @@ class Crear_Ventanas(tk.Frame):
             texto = tk.Listbox(ventana, height = 12 , width = 55 )
             texto.insert(tk.END,*AuxTexto)
             texto.place(x = 20, y = 40)
+
+        if tipo_ventana == "Analizador":
+            Elementos = list(self.DiccionarioObjetos.keys())
+            self.AFD = self.DiccionarioObjetos[Elementos[0]].ir_a()
+
+            print("AFD-------------------------")
+            print(self.AFD.estados)
+            print(self.AFD.finales)
+            print(self.AFD.transiciones)
+             
+            messagebox.showinfo(message="La conversion AFN --> AFD fue Exitosa", title="Confirmacion", parent = ventana)
+
+            tk.Label(ventana, text="Cadena: ").place(x = 20, y = 20)
+
+            Cadena = tk.Entry(ventana,width = 40)
+            Cadena.place(x = 80, y = 20 )
+
+            tk.Button(ventana, text="Analizar", height = 1, width = 5, activebackground = "blue", activeforeground = "White",command = lambda: AlgoritmoLex(Cadena.get(),Resultados,self.AFD)).place( x = 415, y = 15)
+
+            tk.Label(ventana, text="Tabla del AFD ").place(x = 80, y = 45)
+            listaTablaReglas = tk.Listbox(ventana,height = 11 , width = 26)
+            listaTablaReglas.place(x = 20, y = 60)
+
+            ObtencionTablaAFD(self.AFD,listaTablaReglas)
+
+            tk.Label(ventana, text="Resultado Analisis ").place(x = 300, y = 45)
+            Resultados = tk.Listbox(ventana,height = 11 , width = 26)
+            Resultados.place(x = 260, y = 60)
 
         tk.Button(ventana, text="Cerrar" , fg="red", command = ventana.destroy).place(x = 225, y = 250)
 

@@ -2,16 +2,11 @@ from AFN import AFN
 import tkinter as tk
 from tkinter import messagebox
 
-def ObtencionTablaAFD(AFD,Lista):
+def ObtencionTablaAFD(AFD,Lista,ListaAFNs):
     Aux = []
     AFD.tokens = AFD.finales
-    #token = 10
-    #for i in AFD.finales:
-    #    if i == 1:
-    #        AFD.tokens.append(token)
-    #        token += 10
-    #    else:
-    #        AFD.tokens.append(-1)
+
+    tokensModificados = OrdenamientoTokens(AFD.tokens)
 
     Elementos = list(AFD.transiciones.keys())
 
@@ -20,31 +15,13 @@ def ObtencionTablaAFD(AFD,Lista):
         auxTransicion = AFD.transiciones.get(i)
         Aux.append("    Estado " + str(i) + ": " +str(auxTransicion))
         
-    #cadena = "     |" 
-    #for i in AFD.alfabeto:
-    #    cadena+= " "+i
-    #cadena+=" | Aceptación"
-    #Aux.append(cadena)
-    #Elementos = list(AFD.transiciones.keys())
-    #cadena = " ->"
-    #for estado in AFD.estados:
-    #    cadena+= str(estado) + "|"
-    #    for caracter in AFD.alfabeto:
-    #        for i in Elementos:
-    #            auxTransicion = AFD.transiciones.get(i)
-    #            for j in range(0,len(auxTransicion)):
-    #                if auxTransicion[j][0] == caracter: 
-    #                    cadena+=" "+str(auxTransicion[j][1])
-    #                else:
-    #                    cadena+=" -"
-    #        cadena+=" |"        
-    #        cadena+= str(AFD.tokens[AFD.estados.index(estado)])
-    #        Aux.append(cadena)
-    #        cadena = "    "
     Aux.append("")
-    Aux.append("Estados y tokens")
-    for i in range(0,len(AFD.estados)):
-        Aux.append("    "+str(AFD.estados[i])+ " -> "+str(AFD.tokens[i]))
+    Aux.append("Tokens")
+
+    num = 0
+    for i in ListaAFNs:
+        Aux.append("    "+str(i)+ " -> "+str(tokensModificados[num]))
+        num += 1
         
     Lista.insert(tk.END,*Aux)
 
@@ -190,9 +167,12 @@ def CreacionCerraduraOpcional(Diccionario,Lista,root):
     Lista["values"] = Elementos
     print(Diccionario)
 
-def CrearUnionEspecial(Diccionario):
+def CrearUnionEspecial(Diccionario,ListaAFNs):
     listaObjetos = []
     Elementos = list(Diccionario.keys())
+    
+    for x in Elementos:
+        ListaAFNs.append(x)
 
     ObjetoUnico = Diccionario.get(Elementos[0])
     llave = Elementos.pop(0)
@@ -209,3 +189,17 @@ def CrearUnionEspecial(Diccionario):
     Diccionario[NuevaLlave] = ObjetoUnico
 
     messagebox.showinfo(message="La Union especial entre los AFN fue Exitosa", title="Confirmacion")
+
+def OrdenamientoTokens(tokens):
+    listaAux = []
+    lista = sorted(tokens)
+    aux = 0
+
+    for i in lista:
+        if i != aux:
+            listaAux.append(i)
+            aux = i
+    
+    print(listaAux)
+    return listaAux
+

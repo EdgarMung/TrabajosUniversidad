@@ -14,6 +14,7 @@ class Crear_Ventanas(tk.Frame):
         self.AFD = ""
         self.master.geometry("400x700")
         self.master.title("Compiladores")
+        self.ListaAFNs = []
         self.pack()
 
     def create_widgets(self):
@@ -24,7 +25,7 @@ class Crear_Ventanas(tk.Frame):
         tk.Button(self, text="Cerradura Positiva", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold" ,command = lambda: self.create_second_window("Cerradura+",self.master)).pack()
         tk.Button(self, text="Cerradura Kleene", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Cerradura*",self.master)).pack()
         tk.Button(self, text="Opcional", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Opcional",self.master)).pack()
-        tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: CrearUnionEspecial(self.DiccionarioObjetos)).pack()
+        tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: CrearUnionEspecial(self.DiccionarioObjetos,self.ListaAFNs)).pack()
         tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Mostrar",self.master)).pack()
         tk.Button(self, text="Convertir AFN  a AFD", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Analizador",self.master)).pack()
         self.quit = tk.Button(self, text="Cerrar" , fg="red", command=self.master.destroy)
@@ -165,6 +166,7 @@ class Crear_Ventanas(tk.Frame):
             print(self.AFD.estados)
             print(self.AFD.finales)
             print(self.AFD.transiciones)
+            print(self.ListaAFNs)
              
             messagebox.showinfo(message="La conversion AFN --> AFD fue Exitosa", title="Confirmacion", parent = ventana)
 
@@ -179,7 +181,7 @@ class Crear_Ventanas(tk.Frame):
             listaTablaReglas = tk.Listbox(ventana,height = 11 , width = 26)
             listaTablaReglas.place(x = 20, y = 60)
 
-            ObtencionTablaAFD(self.AFD,listaTablaReglas)
+            ObtencionTablaAFD(self.AFD,listaTablaReglas,self.ListaAFNs)
 
             tk.Label(ventana, text="Resultado Analisis ").place(x = 300, y = 45)
             Resultados = tk.Listbox(ventana,height = 11 , width = 26)

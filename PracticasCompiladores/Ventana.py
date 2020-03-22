@@ -97,7 +97,7 @@ class Crear_Ventanas(tk.Frame):
 
         if tipo_ventana == "Cerradura+":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/Cerradura+.jpeg")
+            aux = Image.open("./Imagenes/CerraduraPositiva.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 
@@ -112,7 +112,7 @@ class Crear_Ventanas(tk.Frame):
 
         if tipo_ventana == "Cerradura*":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/Cerradura*.jpeg")
+            aux = Image.open("./Imagenes/CerraduraAsterisco.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 

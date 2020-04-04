@@ -34,7 +34,7 @@ class Crear_Ventanas(tk.Frame):
     def create_second_window(self,tipo_ventana,root):
         ventana = tk.Toplevel(root)
         ventana.title("Operación "+tipo_ventana)
-        ventana.geometry("500x300")
+          
 
         if tipo_ventana == "AFN Simple":
             Elementos = list(self.DiccionarioObjetos.keys())
@@ -97,7 +97,7 @@ class Crear_Ventanas(tk.Frame):
 
         if tipo_ventana == "Cerradura+":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/CerraduraPositiva.jpeg")
+            aux = Image.open("./Imagenes/Cerradura+.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 
@@ -112,7 +112,7 @@ class Crear_Ventanas(tk.Frame):
 
         if tipo_ventana == "Cerradura*":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/CerraduraAsterisco.jpeg")
+            aux = Image.open("./Imagenes/Cerradura*.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 

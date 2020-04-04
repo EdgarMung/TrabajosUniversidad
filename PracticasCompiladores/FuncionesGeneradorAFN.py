@@ -1,4 +1,4 @@
-from AFN import AFN
+from Clases import AFN
 import tkinter as tk
 from tkinter import messagebox
 

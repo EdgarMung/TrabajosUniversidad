@@ -1,4 +1,5 @@
 from Estado import Estado
+
 class AFD:
 	def __init__(self,estados,transiciones,finales,alfabeto):
 		self.estados=estados

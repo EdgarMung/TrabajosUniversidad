@@ -3,10 +3,10 @@ from PIL import Image,ImageTk
 from tkinter import ttk
 from tkinter import messagebox
 from AlgoritmoLex import AlgoritmoLex
-from FuncionesAyuda import *
+import FuncionesGeneradorAFN as Fun
 
 # Clase para crear la pantalla **********************************************************************************
-class Crear_Ventanas(tk.Frame):
+class Crear_Ventana(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
@@ -14,6 +14,7 @@ class Crear_Ventanas(tk.Frame):
         self.AFD = ""
         self.master.geometry("400x700")
         self.master.title("Compiladores")
+        self.master.config(bg="navy")
         self.ListaAFNs = []
         self.pack()
 
@@ -25,7 +26,7 @@ class Crear_Ventanas(tk.Frame):
         tk.Button(self, text="Cerradura Positiva", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold" ,command = lambda: self.create_second_window("Cerradura+",self.master)).pack()
         tk.Button(self, text="Cerradura Kleene", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Cerradura*",self.master)).pack()
         tk.Button(self, text="Opcional", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Opcional",self.master)).pack()
-        tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: CrearUnionEspecial(self.DiccionarioObjetos,self.ListaAFNs)).pack()
+        tk.Button(self, text="Realizar Union Especial", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: Fun.CrearUnionEspecial(self.DiccionarioObjetos,self.ListaAFNs)).pack()
         tk.Button(self, text="ImprimirTransiciones", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Mostrar",self.master)).pack()
         tk.Button(self, text="Convertir AFN  a AFD", height = 3, width = 20, activebackground = "blue", activeforeground = "White",font = "bold",command = lambda: self.create_second_window("Analizador",self.master)).pack()
         self.quit = tk.Button(self, text="Cerrar" , fg="red", command=self.master.destroy)
@@ -46,7 +47,7 @@ class Crear_Ventanas(tk.Frame):
             Entrada = tk.Entry(ventana,width = 10)
             Entrada.place(x = 330, y = 50 )
 
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionAFNSimple(self.DiccionarioObjetos,lista,Entrada,ventana)).place( x = 420, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionAFNSimple(self.DiccionarioObjetos,lista,Entrada,ventana)).place( x = 420, y = 46)
             lista = tk.Listbox(ventana)
             
 
@@ -70,7 +71,7 @@ class Crear_Ventanas(tk.Frame):
             AFN_b = ttk.Combobox(ventana,state = "readonly",values = Elementos , width = 15)
             AFN_b.place(x = 275, y = 50)
 
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionUnion(self.DiccionarioObjetos,AFN_a,AFN_b,ventana)).place( x = 410, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionUnion(self.DiccionarioObjetos,AFN_a,AFN_b,ventana)).place( x = 410, y = 46)
 
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
@@ -89,7 +90,7 @@ class Crear_Ventanas(tk.Frame):
             AFN_b = ttk.Combobox(ventana,state = "readonly",values = Elementos , width = 12)
             AFN_b.place(x = 290, y = 50)
 
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionConcatenacion(self.DiccionarioObjetos,AFN_a,AFN_b,ventana)).place( x = 410, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionConcatenacion(self.DiccionarioObjetos,AFN_a,AFN_b,ventana)).place( x = 410, y = 46)
 
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
@@ -104,7 +105,7 @@ class Crear_Ventanas(tk.Frame):
             tk.Label(ventana, text="Cerradura Positiva a: ").place(x = 100, y = 50)
             AFN_a = ttk.Combobox(ventana,state = "readonly",values = Elementos , width = 15)
             AFN_a.place(x = 250, y = 50)
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionCerraduraPositiva(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionCerraduraPositiva(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
 
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
@@ -119,7 +120,7 @@ class Crear_Ventanas(tk.Frame):
             tk.Label(ventana, text="Cerradura de Kleene a: ").place(x = 100, y = 50)
             AFN_a = ttk.Combobox(ventana,state = "readonly",values = Elementos , width = 15)
             AFN_a.place(x = 250, y = 50)
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionCerraduraKleene(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionCerraduraKleene(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
 
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
@@ -134,7 +135,7 @@ class Crear_Ventanas(tk.Frame):
             tk.Label(ventana, text="Cerradura Opcional a: ").place(x = 100, y = 50)
             AFN_a = ttk.Combobox(ventana,state = "readonly",values = Elementos , width = 15)
             AFN_a.place(x = 250, y = 50)
-            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: CreacionCerraduraOpcional(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
+            tk.Button(ventana, text="Crear", height = 1, width = 5, activebackground = "blue", activeforeground = "White", command = lambda: Fun.CreacionCerraduraOpcional(self.DiccionarioObjetos,AFN_a,ventana)).place( x = 410, y = 46)
 
             EtiquetaImagen = tk.Label(ventana,image = img)
             EtiquetaImagen.image = img
@@ -181,7 +182,7 @@ class Crear_Ventanas(tk.Frame):
             listaTablaReglas = tk.Listbox(ventana,height = 11 , width = 26)
             listaTablaReglas.place(x = 20, y = 60)
 
-            ObtencionTablaAFD(self.AFD,listaTablaReglas,self.ListaAFNs)
+            Fun.ObtencionTablaAFD(self.AFD,listaTablaReglas,self.ListaAFNs)
 
             tk.Label(ventana, text="Resultado Analisis ").place(x = 300, y = 45)
             Resultados = tk.Listbox(ventana,height = 11 , width = 26)

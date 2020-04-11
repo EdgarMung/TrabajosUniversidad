@@ -13,7 +13,7 @@ class Crear_Ventana(tk.Frame):
         self.DiccionarioObjetos = {}
         self.AFD = ""
         self.master.geometry("400x700")
-        self.master.title("Compiladores")
+        self.master.title("Generador AFN")
         self.master.config(bg="navy")
         self.ListaAFNs = []
         self.pack()
@@ -34,6 +34,7 @@ class Crear_Ventana(tk.Frame):
 
     def create_second_window(self,tipo_ventana,root):
         ventana = tk.Toplevel(root)
+        ventana.geometry("500x300")
         ventana.title("Operación "+tipo_ventana)
           
 
@@ -98,7 +99,7 @@ class Crear_Ventana(tk.Frame):
 
         if tipo_ventana == "Cerradura+":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/Cerradura+.jpeg")
+            aux = Image.open("./Imagenes/CerraduraPositiva.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 
@@ -113,7 +114,7 @@ class Crear_Ventana(tk.Frame):
 
         if tipo_ventana == "Cerradura*":
             Elementos = list(self.DiccionarioObjetos.keys())
-            aux = Image.open("./Imagenes/Cerradura*.jpeg")
+            aux = Image.open("./Imagenes/CerraduraAsterisco.jpeg")
             aux = aux.resize((350, 125), Image.ANTIALIAS)
             img = ImageTk.PhotoImage(aux)
 

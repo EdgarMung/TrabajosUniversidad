@@ -16,7 +16,7 @@ class Calculadora:
 		self.SIN=80
 		self.COS=90
 		self.TAN=100
-		self.NUM=66
+		self.NUM=110
 		self.contador=0
 		self.v2=[]
 	#----------------------------------------------------

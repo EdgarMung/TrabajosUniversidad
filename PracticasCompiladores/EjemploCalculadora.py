@@ -233,8 +233,5 @@ mas.union_especial([menos,mult,div,pot,i,d,sin,cos,tan,digitos])
 AFDD=mas.ir_a()
 
 
-
-
 MiCalculadora=Calculadora(AFDD,"1+4*2+cos(1)*sin(2-1)-1")
 MiCalculadora.E()
-print(MiCalculadora.Lex.getToken())

@@ -1,4 +1,6 @@
 from Estado import Estado
+import math
+
 class AFD:
 	def __init__(self,estados,transiciones,finales,alfabeto):
 		self.estados=estados
@@ -349,6 +351,203 @@ class Lexico:
 		return -1
 	def rewind(self,cadena):
 		self.cadena=cadena+self.cadena
+
+# -----------------------------------------------------------------------------------------------------
+class Calculadora:
+	def __init__(self,AFDD):
+		#self.Lex=Lexico(cadena,AFD)
+		self.AFDD = AFDD
+		self.Lex = None
+		self.MAS=10
+		self.MENOS=20
+		self.MULT=30
+		self.DIV=40
+		self.POT=50
+		self.PAR_I=60
+		self.PAR_D=70
+		self.SIN=80
+		self.COS=90
+		self.TAN=100
+		self.NUM=110
+		self.contador=0
+		self.v2=[]
+	#----------------------------------------------------
+	def ConsultaResultado(self):
+		resultado = str(self.v2[0])
+		self.v2 = []
+		self.contador = 0
+		return resultado
+
+
+	#----------------------------------------------------
+	def InicioOperaciones(self,cadena):
+		self.Lex = Lexico(cadena,self.AFDD)
+		self.E()
+
+
+	# ---------------------------------------------------
+	def E(self):
+		print('E:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		if self.T():
+			if self.Ep():
+			 return True
+		return False
+	#----------------------------------------------------
+	def Ep(self):
+		print('Ep:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		tupla=self.Lex.getToken()
+		token=tupla[1]
+		print(tupla[0],token)
+		if token==self.MAS:
+			if self.T():
+				self.v2[self.contador-2]+=self.v2[self.contador-1]
+				self.v2.pop()
+				self.contador-=1
+				if self.Ep():
+					return True
+			return False
+		elif token==self.MENOS:
+			if self.T():
+				self.v2[self.contador-2]-=self.v2[self.contador-1]
+				self.v2.pop()
+				self.contador-=1
+				if self.Ep():
+					return True
+			return False
+		if tupla[0] != "$":
+			print("Se regreso ",tupla[0])
+			self.Lex.rewind(tupla[0])
+		return True
+	#----------------------------------------------------
+	def T(self):
+		print('T:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		if self.P():
+			if self.Tp():
+			 return True
+		return False
+	#----------------------------------------------------
+	def Tp(self):
+		print('Tp:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		tupla=self.Lex.getToken()
+		token=tupla[1]
+		print(tupla[0],token)
+		if token==self.MULT:
+			if self.P():
+				self.contador-=1
+				self.v2[self.contador-1]*=self.v2[self.contador]
+				self.v2.pop()
+				if self.Tp():
+					return True
+			return False
+		if token==self.DIV:
+			if self.P():
+				self.contador-=1
+				self.v2[self.contador-1]/=self.v2[self.contador]
+				self.v2.pop()
+				if self.Tp():
+					return True
+			return False
+		if tupla[0] != "$":
+			print("Se regreso ",tupla[0])
+			self.Lex.rewind(tupla[0])
+		return True
+	#----------------------------------------------------
+	def P(self):
+		print('P:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		if self.F():
+			if self.Pp():
+			 return True
+		return False
+	#----------------------------------------------------
+	def Pp(self):
+		print('Pp:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		tupla=self.Lex.getToken()
+		token=tupla[1]
+		print(tupla[0],token)
+		if token==self.POT:
+			if self.F():
+				if self.Pp():
+					return True
+			return False
+		if tupla[0] != "$":
+			print("Se regreso ",tupla[0])
+			self.Lex.rewind(tupla[0])
+		return True
+	#----------------------------------------------------
+	def F(self):
+		print('F:',end='')
+		print(self.Lex.cadena,end=" ")
+		print(self.v2,end=" ")
+		print(self.contador)
+		tupla=self.Lex.getToken()
+		token=tupla[1]
+		print(tupla[0],token)
+		if token==self.PAR_I:
+			if self.E():
+				tupla=self.Lex.getToken()
+				token=tupla[1]
+				if token==self.PAR_D:
+					return True
+				return False
+		if token==self.SIN:
+			tupla=self.Lex.getToken()
+			token=tupla[1]
+			if token==self.PAR_I:
+				if self.E():
+					self.v2[self.contador-1]=math.sin(self.v2[self.contador-1])
+					tupla=self.Lex.getToken()
+					token=tupla[1]
+					if token==self.PAR_D:
+						return True
+					return False
+		if token==self.COS:
+			tupla=self.Lex.getToken()
+			token=tupla[1]
+			if token==self.PAR_I:
+				if self.E():
+					self.v2[self.contador-1]=math.cos(self.v2[self.contador-1])
+					tupla=self.Lex.getToken()
+					token=tupla[1]
+					if token==self.PAR_D:
+						return True
+					return False
+		if token==self.TAN:
+			tupla=self.Lex.getToken()
+			token=tupla[1]
+			if token==self.PAR_I:
+				if self.E():
+					self.v2[self.contador-1]=math.tan(self.v2[self.contador-1])
+					tupla=self.Lex.getToken()
+					token=tupla[1]
+					if token==self.PAR_D:
+						return True
+					return False
+		if token==self.NUM:
+			self.v2.append(0)
+			self.v2[self.contador]=int(tupla[0])
+			self.contador+=1
+			return True
+		return False
+
+#----------------------------------------------------
 
 '''
 a=AFN(simbolo='a')

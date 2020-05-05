@@ -17,7 +17,7 @@ class Crear_VentanaCalculadora(tk.Frame):
         Entrada = tk.Entry(self.master,width = 40,background = "white",fg = "black",justify = tk.CENTER)
         Entrada.grid(column = 1,row = 0,columnspan = 2,padx = 5, pady = 5)
         tk.Label(self.master, text="RESULTADO :",font = ("Arial Black",12),background = "dodger blue",fg = "black").grid(column = 1,row = 1,padx = 5, pady = 5)
-        Salida = tk.Entry(self.master,width = 10,background = "white",fg = "black",state="readonly")
+        Salida = tk.Entry(self.master,width = 10,background = "white",fg = "black",state="readonly",justify = tk.CENTER)
         Salida.grid(column = 2,row = 1,padx = 5, pady = 5)
         tk.Button(self.master, text="Calcular", height = 1, width = 5, activebackground = "blue", activeforeground = "White",command = lambda: self.Calcular(Entrada.get(),Salida)).grid(column = 3, row = 0,padx = 5, pady = 5)
         tk.Button(self.master, text="Cerrar" , command = self.master.destroy).grid(column = 1, row = 2,padx = 5, pady = 5)
@@ -73,6 +73,9 @@ class Crear_VentanaCalculadora(tk.Frame):
     def Calcular(self,cadena,Salida):
         self.Objeto.InicioOperaciones(cadena)
         resultado = self.Objeto.ConsultaResultado()
-        Salida.insert(0,"Si funciona")
+        Salida.config(state = tk.NORMAL)
+        Salida.delete(0)
+        Salida.insert(tk.END,resultado)
+        Salida.config(state="readonly")
 
         

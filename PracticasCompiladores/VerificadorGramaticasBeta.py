@@ -5,6 +5,7 @@ def G():
 
 def ListaReglas():
     if(Regla()):
+        Lexico
         if (ListaReglas()):
             return True
     return False

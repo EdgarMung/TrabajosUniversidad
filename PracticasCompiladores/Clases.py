@@ -9,6 +9,8 @@ class AFD:
 		self.tokens = []
 		self.alfabeto = alfabeto
 
+#----------------------------------------------------------------------------------------------------
+
 class AFN:
 	#Constructor de la clase.
 	def __init__(self, simbolo = None):
@@ -293,6 +295,7 @@ class AFN:
 				self.estados_aceptacion.append(estado)
 			self.estados.update(AFN.estados)
 
+#-----------------------------------------------------------------------------------------------------
 
 class Lexico:
 	def __init__(self,cadena,AFD):
@@ -351,6 +354,12 @@ class Lexico:
 		return -1
 	def rewind(self,cadena):
 		self.cadena=cadena+self.cadena
+
+	def GetEstadoLexic(self,temp):
+		temp[0] = self.cadena
+
+	def SetEstadoLexic(self,temp):
+		self.cadena = temp[0]
 
 # -----------------------------------------------------------------------------------------------------
 class Calculadora:
@@ -549,6 +558,100 @@ class Calculadora:
 
 #----------------------------------------------------
 
+class Verificador:
+    def __init__(self,AFDd):
+        #self.Lex = Lexico(cadena,AFD)
+        self.AFDD = AFDd
+        self.SIMB = 10
+        self.FLECHA = 20
+        self.PC = 30
+        self.OR = 40
+
+    def Verificar(self,cadena):
+        self.Lex = Lexico(cadena,self.AFDD)
+        return self.G()
+        
+    def G(self):
+        print("G:", end = " ")
+        print(self.Lex.cadena)
+        if(self.ListaReglas()):
+            return True
+        return False
+
+    def ListaReglas(self):
+        print("ListaReglas:", end = " ")
+        print(self.Lex.cadena)
+        temp = [0]
+        if(self.Regla()):
+            self.Lex.GetEstadoLexic(temp)
+            if (self.ListaReglas()):
+                return True
+            self.Lex.SetEstadoLexic(temp)
+            return True
+        return False
+
+    def Regla(self):
+        print("Regla:", end = " ")
+        print(self.Lex.cadena)
+        if(self.LadoIzq()):
+            tupla=self.Lex.getToken()
+            token = tupla[1]
+            print(tupla)
+            if(token == self.FLECHA):
+                if(self.ListaLadosDer()):
+                    tupla=self.Lex.getToken()
+                    token = tupla[1]
+                    print(tupla)
+                    if(token == self.PC):
+                        return True
+        return False
+
+    def LadoIzq(self):
+        print("LadoIzq:", end = " ")
+        print(self.Lex.cadena)
+        tupla=self.Lex.getToken()
+        token = tupla[1]
+        print(tupla)
+        if(token == self.SIMB):
+            return True
+        return False
+
+    def ListaLadosDer(self):
+        print("ListaLadosDer:", end = " ")
+        print(self.Lex.cadena)
+        if(self.LadoDer()):
+            tupla=self.Lex.getToken()
+            token = tupla[1]
+            print(tupla)
+            if(token == self.OR):
+                if(self.ListaLadosDer()):
+                    return True
+                return False
+            self.Lex.rewind(tupla[0])
+            return True
+        return False
+
+    def LadoDer(self):
+        print("LadoDer:", end = " ")
+        print(self.Lex.cadena)
+        return self.ListaSimb()
+
+    def ListaSimb(self):
+        print("ListaSimb:", end = " ")
+        print(self.Lex.cadena)
+        temp = [0]
+        tupla=self.Lex.getToken()
+        token = tupla[1]
+        print(tupla)
+        if(token == self.SIMB):
+            self.Lex.GetEstadoLexic(temp)
+            if(self.ListaSimb()):
+                return True
+            self.Lex.SetEstadoLexic(temp)
+            return True
+        return False
+
+#----------------------------------------------------------------------------------------------------------
 '''
 a=AFN(simbolo='a')
 b=AFN(simbolo='b')

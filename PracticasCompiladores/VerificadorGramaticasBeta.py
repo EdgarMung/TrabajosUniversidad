@@ -3,12 +3,17 @@ from Clases import AFN
 from AlgoritmoLexObjeto import Lexico
 
 class Verificador:
-    def __init__(self,AFD,cadena):
-        self.Lex = Lexico(cadena,AFD)
+    def __init__(self,AFDd):
+        #self.Lex = Lexico(cadena,AFD)
+        self.AFDD = AFDd
         self.SIMB = 10
         self.FLECHA = 20
         self.PC = 30
         self.OR = 40
+
+    def Verificar(self,cadena):
+        self.Lex = Lexico(cadena,self.AFDD)
+        return self.G()
         
     def G(self):
         print("G:", end = " ")
@@ -171,5 +176,5 @@ sim.union_especial([flecha,PC,Compuerta])
 
 AFDD = sim.ir_a()
 
-Herramienta = Verificador(AFDD,"E->E+T|E-T|T;T->T*F|T/F|F;F->(E)|num;")
-print(Herramienta.G())
+Herramienta = Verificador(AFDD)
+print(Herramienta.Verificar("E->E+T|E-T|T;T->T*F|T/F|F;F->(E)|num;"))

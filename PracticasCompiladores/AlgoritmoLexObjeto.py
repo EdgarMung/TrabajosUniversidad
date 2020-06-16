@@ -55,3 +55,9 @@ class Lexico:
 		return -1
 	def rewind(self,cadena):
 		self.cadena=cadena+self.cadena
+
+	def GetEstadoLexic(self,temp):
+		temp[0] = self.cadena
+
+	def SetEstadoLexic(self,temp):
+		self.cadena = temp[0]

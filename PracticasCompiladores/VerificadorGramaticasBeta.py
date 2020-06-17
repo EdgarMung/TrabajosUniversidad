@@ -19,7 +19,11 @@ class Verificador:
         print("G:", end = " ")
         print(self.Lex.cadena)
         if(self.ListaReglas()):
-            return True
+            tupla=self.Lex.getToken()
+            token = tupla[1]
+            print(tupla)
+            if(token == 0):
+                return True
         return False
 
     def ListaReglas(self):
@@ -177,4 +181,5 @@ sim.union_especial([flecha,PC,Compuerta])
 AFDD = sim.ir_a()
 
 Herramienta = Verificador(AFDD)
-print(Herramienta.Verificar("E->E+T|E-T|T;T->T*F|T/F|F;F->(E)|num;"))
+print(Herramienta.Verificar("E->E+T|E-T|T;T->T*F|T/F|F;F->(E)|num;A"))
+#E->E+T|E-T|T;T->T*F|T/F|F;F->(E)|num;
